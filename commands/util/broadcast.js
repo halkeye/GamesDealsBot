@@ -21,16 +21,7 @@ module.exports = class BroadcastCommand extends Command {
   }
 
   async run(msg, args) {
-    if (!adminUserId) {
-      logger.error(new Error('Someone tried to use the broadcast command'));
-      return msg.reply('Something went wrong!');
-    }
-
     try {
-      if (msg.author.id !== adminUserId) {
-        return msg.reply('You are not authorized to use this command!');
-      }
-
       Webhook.postMessage(args.message);
       return msg.reply('ACCEPTED!');
     } catch (e) {
