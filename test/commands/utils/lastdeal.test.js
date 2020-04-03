@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const { CommandoClient } = require('discord.js-commando');
-const Deal = require('../../models/Deal.js');
-const LastDeal = require('./lastdeal.js');
+const Deal = require('../../../models/Deal.js');
+const LastDeal = require('../../../commands/util/lastdeal.js');
 
 describe('commands - util - lastdeal', () => {
   it('returns the last deal found', async () => {
