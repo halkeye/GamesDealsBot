@@ -22,28 +22,28 @@ GamesDeals is Discord bot build with discord.js. GamesDeals informs about games 
 |                 | invite        | inv         | Sends bot invitation URL.                                                                                        |                      |
 |                 | lastdeal      | ld          | Sends information about last found game.                                                                         |                      |
 |                 | statistics    | stat, stats | Sends basic statistics about the bot.                                                                            |                      |
-|                 | support       | supp        | Sends support server invitation URL.                                                                             |                      |
 
 Command list can be accessed via `help` command.
 
 ## How to run own instance of the bot
 
-1. Configure [GamesDealsAPI](https://github.com/mikolajkalwa/GamesDealsAPI).
-2. Clone this repo,
-3. Run `npm install`.
-4. Configure the required environment variables (`.env` file can be used).
-5. Run `npm run start-pretty`.
-6. If you want to get notifications about free games, configure [GamesDealsNotifier](https://github.com/mikolajkalwa/GamesDealsNotifier).
+1. Clone this repo,
+2. Run `npm install`.
+3. Configure the required environment variables (`.env` file can be used).
+4. Run `npm run start-pretty`.
 
 ### Required environment variables
 
 1. `BOT_TOKEN` generated on https://discordapp.com/developers/applications
-2. `API_URL` for example http://localhost:8080
+2. `DATABASE_URL`
 
 ### Optional environment variables
 
-1. `COMMAND_PREXIF`
+1. `COMMAND_PREXIF` - Command prefix, defaults to `gd:`
 2. `LOG_LEVEL`
+3. `DISCORD_BOTS_ORG` - report to discordbots.org
+4. `DISCORD_BOTS_GG` - report to discord.bots.gg
+5. `ADMIN_USER_ID` -
 
 ## Licence 
 

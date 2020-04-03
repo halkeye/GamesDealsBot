@@ -1,16 +1,14 @@
 const path = require('path');
-const {
-  CommandoClient,
-} = require('discord.js-commando');
+const { CommandoClient } = require('discord.js-commando');
 const axios = require('axios');
 const logger = require('./lib/logger.js');
 
 const commandPrefix = process.env.COMMAND_PREXIF || 'gd:';
 
 const bot = new CommandoClient({
-  owner: '172012484306141184',
+  owner: process.env.ADMIN_USER_ID || 'some never matching id',
   commandPrefix,
-  invite: 'https://discord.gg/Tgaag63',
+  // invite: 'https://discord.gg/Tgaag63',
   disabledEvents: [
     'TYPING_START',
     'MESSAGE_REACTION_ADD',

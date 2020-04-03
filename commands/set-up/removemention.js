@@ -1,8 +1,6 @@
 const { Command } = require('discord.js-commando');
-const axios = require('axios');
+const Webhook = require('../../models/Webhook.js');
 const logger = require('../../lib/logger.js');
-
-const apiUrl = process.env.API_URL;
 
 module.exports = class RemoveMentionCommand extends Command {
   constructor(client) {
@@ -23,20 +21,19 @@ module.exports = class RemoveMentionCommand extends Command {
 
   async run(msg) { // eslint-disable-line class-methods-use-this
     try {
-      const response = await axios.get(`${apiUrl}/webhooks/byguild/${msg.guild.id}`);
+      const webhook = await Webhook.findOne({
+        where: {
+          guild_id: msg.guild.id,
+        },
+      });
 
-      if (response.status === 200) {
-        await axios.patch(`${apiUrl}/webhooks/byguild/${msg.guild.id}`, {
-          role_to_mention: undefined,
-        });
-        return msg.reply(':white_check_mark: | Role to mention has been updated successfully!');
-      }
-
-      if (response.status === 204) {
+      if (!webhook) {
         return msg.reply(':x: | Webhook for this server doesn\'t exists!');
       }
 
-      return msg.reply(':exclamation: | Oh no, something went wrong. Please try again later.');
+      webhook.role_to_mention = null;
+      await webhook.save();
+      return msg.reply(':white_check_mark: | Role to mention has been updated successfully!');
     } catch (e) {
       logger.error(e);
       return msg.reply(':exclamation: | Oh no, something went wrong. Please try again later.');

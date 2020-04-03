@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  database:
+    image: postgres:11.4-alpine
+    ports:
+      - 5432:5432
+    #volumes:
+    #  - /var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=gamedeals

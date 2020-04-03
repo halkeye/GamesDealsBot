@@ -1,9 +1,6 @@
 const { Command } = require('discord.js-commando');
-const axios = require('axios');
-
+const Webhook = require('../../models/Webhook.js');
 const logger = require('../../lib/logger.js');
-
-const apiUrl = process.env.API_URL;
 
 module.exports = class BroadcastCommand extends Command {
   constructor(client) {
@@ -23,15 +20,18 @@ module.exports = class BroadcastCommand extends Command {
     });
   }
 
-  async run(msg, args) { // eslint-disable-line class-methods-use-this
+  async run(msg, args) {
+    if (!adminUserId) {
+      logger.error(new Error('Someone tried to use the broadcast command'));
+      return msg.reply('Something went wrong!');
+    }
+
     try {
-      if (msg.author.id !== '172012484306141184') {
+      if (msg.author.id !== adminUserId) {
         return msg.reply('You are not authorized to use this command!');
       }
 
-      await axios.post(`${apiUrl}/execute`, {
-        message: args.message,
-      });
+      Webhook.postMessage(args.message);
       return msg.reply('ACCEPTED!');
     } catch (e) {
       logger.error(e);

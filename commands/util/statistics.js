@@ -1,10 +1,8 @@
 const moment = require('moment');
-const axios = require('axios');
 const { Command } = require('discord.js-commando');
-
+const Webhook = require('../../models/Webhook.js');
+const Deal = require('../../models/Deal.js');
 const logger = require('../../lib/logger.js');
-
-const apiUrl = process.env.API_URL;
 
 module.exports = class StatisticsCommand extends Command {
   constructor(client) {
@@ -23,13 +21,13 @@ module.exports = class StatisticsCommand extends Command {
 
   async run(msg) { // eslint-disable-line class-methods-use-this
     try {
-      const { data: { createdWebhooks: webhooksCount } } = await axios(`${apiUrl}/webhooks/amount`);
-      const { data: { foundDeals: dealsCount } } = await axios(`${apiUrl}/deals/amount`);
+      const webhooksCount = await Webhook.count({ paranoid: true });
+      const dealsCount = await Deal.count({ paranoid: false });
       const guilds = await this.client.shard.fetchClientValues('guilds.size');
       const guildsCount = guilds.reduce((acc, cur) => acc + cur);
-      const stats = `:robot: **Uptime:** ${moment.duration(this.client.uptime).locale('en').humanize()},\n`
-        + `:desktop: **Servers:** ${guildsCount},\n`
-        + `:postbox: **Webhooks:** ${webhooksCount},\n`
+      const stats = `:robot: **Uptime:** ${moment.duration(this.client.uptime).locale('en').humanize()}\n`
+        + `:desktop: **Servers:** ${guildsCount}\n`
+        + `:postbox: **Webhooks:** ${webhooksCount}\n`
         + `:video_game: **Found Games:** ${dealsCount}`;
       return msg.reply(`\n${stats}`);
     } catch (e) {

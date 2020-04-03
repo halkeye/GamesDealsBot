@@ -1,5 +1,6 @@
 const { Command } = require('discord.js-commando');
 
+const clientID = process.env.CLIENT_ID;
 module.exports = class InviteCommand extends Command {
   constructor(client) {
     super(client, {
@@ -12,6 +13,6 @@ module.exports = class InviteCommand extends Command {
   }
 
   run(msg) { // eslint-disable-line class-methods-use-this
-    msg.reply('https://discordapp.com/oauth2/authorize?client_id=396466836331429889&scope=bot&permissions=536890368');
+    msg.reply(`https://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=536890368`);
   }
 };

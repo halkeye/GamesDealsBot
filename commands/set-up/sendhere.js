@@ -1,10 +1,8 @@
 const { Command } = require('discord.js-commando');
-const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const Webhook = require('../../models/Webhook.js');
 const logger = require('../../lib/logger.js');
-
-const apiUrl = process.env.API_URL;
 
 module.exports = class SendHereCommand extends Command {
   constructor(client) {
@@ -34,17 +32,21 @@ module.exports = class SendHereCommand extends Command {
 
   async run(msg, args) { // eslint-disable-line class-methods-use-this
     try {
-      const response = await axios.get(`${apiUrl}/webhooks/byguild/${msg.guild.id}`);
+      const webhook = await Webhook.findOne({
+        where: {
+          guild_id: msg.guild.id,
+        },
+      });
 
-      if (response.status === 204) {
+      if (!webhook) {
         const image = fs.readFileSync(path.resolve(__dirname, '..', '..', 'assets', 'avatar.png'), 'base64');
-        const webhook = await msg.channel.createWebhook('Games Deals', `data:image/png;base64,${image}`);
-        await axios.post(`${apiUrl}/webhooks/`, {
-          webhook_id: webhook.id,
-          webhook_token: webhook.token,
-          guild_id: webhook.guildID,
+        const discordWebhook = await msg.channel.createWebhook('Games Deals', `data:image/png;base64,${image}`);
+        await new Webhook({
+          webhook_id: discordWebhook.id,
+          webhook_token: discordWebhook.token,
+          guild_id: discordWebhook.guildID,
           role_to_mention: Object.prototype.hasOwnProperty.call(args.roleToMention, 'name') ? `@${args.roleToMention.name}` : undefined,
-        });
+        }).save();
         return msg.reply(':white_check_mark: | Channel has been set successfully!');
       }
       return msg.reply(':x: | Webhook for this server already exists!');

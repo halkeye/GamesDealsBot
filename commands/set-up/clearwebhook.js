@@ -1,8 +1,6 @@
 const { Command } = require('discord.js-commando');
-const axios = require('axios');
 const logger = require('../../lib/logger.js');
-
-const apiUrl = process.env.API_URL;
+const Webhook = require('../../models/Webhook.js');
 
 module.exports = class ClearWebhookCommand extends Command {
   constructor(client) {
@@ -24,8 +22,13 @@ module.exports = class ClearWebhookCommand extends Command {
 
   async run(msg) { // eslint-disable-line class-methods-use-this
     try {
-      const response = await axios.delete(`${apiUrl}/webhooks/byguild/${msg.guild.id}`);
-      if (response.status === 204) {
+      const count = await Webhook.destroy({
+        where: {
+          guild_id: msg.guild.id,
+        },
+        paranoid: true,
+      });
+      if (!count) {
         return msg.reply(':x: | There are no webhooks related to this server.');
       }
       return msg.reply(':white_check_mark: | Webhook has been removed. Bot won\'t send any notifications to this channel anymore.');
