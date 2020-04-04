@@ -36,6 +36,9 @@ const Deal = database.define(
         unique: true,
         fields: ['thread_id'],
       },
+      {
+        fields: ['createdAt'],
+      },
     ],
   },
 );

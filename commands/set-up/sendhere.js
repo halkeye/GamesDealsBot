@@ -32,15 +32,11 @@ module.exports = class SendHereCommand extends Command {
 
   async run(msg, args) { // eslint-disable-line class-methods-use-this
     try {
-      const webhook = await Webhook.findOne({
-        where: {
-          guild_id: msg.guild.id,
-        },
-      });
+      const webhook = await Webhook.findForGuild(msg.guild.id);
 
       if (!webhook) {
         const image = fs.readFileSync(path.resolve(__dirname, '..', '..', 'assets', 'avatar.png'), 'base64');
-        const discordWebhook = await msg.channel.createWebhook('Games Deals', `data:image/png;base64,${image}`);
+        const discordWebhook = await msg.channel.createWebhook('Games Deals', { avatar: `data:image/png;base64,${image}` });
         await new Webhook({
           webhook_id: discordWebhook.id,
           webhook_token: discordWebhook.token,

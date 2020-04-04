@@ -15,6 +15,8 @@ if (process.env.JEST_NOCK_RECORD === 'true') {
   nock.recorder.rec({
     logging: appendLogToFile,
   });
+} else {
+  process.env.BOT_TOKEN = 'faketoken';
 }
 
 beforeEach(async () => {

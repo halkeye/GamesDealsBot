@@ -26,7 +26,19 @@ const Webhook = database.define(
       allowNull: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ['webhook_id'],
+      },
+      {
+        unique: true,
+        fields: ['guild_id'],
+      },
+    ],
+  },
 );
 
 const postWebhook = async (message, webhook) => {
@@ -41,13 +53,19 @@ const postWebhook = async (message, webhook) => {
   );
 };
 
+Webhook.findForGuild = async (id) => Webhook.findOne({
+  where: {
+    guild_id: id,
+  },
+});
+
 Webhook.postMessage = async (message) => {
   const webhooks = await Webhook.findAll({});
   if (!webhooks.length) {
     return;
   }
 
-  const actions = webhooks.map(webhook => () => postWebhook(message, webhook));
+  const actions = webhooks.map((webhook) => () => postWebhook(message, webhook));
   const responses = await pAll(actions, { concurrency: 30 });
 
   const webhooksToRemove = [];
