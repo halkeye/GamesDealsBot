@@ -17,6 +17,7 @@ const bot = new CommandoClient({
     'CHANNEL_PINS_UPDATE',
   ],
   messageCacheMaxSize: 10,
+  messageSweepInterval: 30 * 60,
 });
 
 
@@ -24,8 +25,8 @@ function setActivity() {
   bot.user.setActivity(`Use ${commandPrefix}help`);
 }
 
-bot.on('error', e => logger.error(`[Shard ${bot.shard.id}] ${e}`));
-bot.on('warn', info => logger.warn(`[Shard ${bot.shard.id}] ${info}`));
+bot.on('error', (e) => logger.error(`[Shard ${bot.shard.id}] ${e}`));
+bot.on('warn', (info) => logger.warn(`[Shard ${bot.shard.id}] ${info}`));
 bot.on('ready', () => {
   logger.info(`Shard ${bot.shard.id} is ready!`);
   setActivity();
@@ -36,7 +37,7 @@ bot.on('resume', () => {
   logger.info(`Shard ${bot.shard.id} has reconnected!`);
   setActivity();
 });
-bot.on('rateLimit', rateLimitInfo => logger.warn(rateLimitInfo));
+bot.on('rateLimit', (rateLimitInfo) => logger.warn(rateLimitInfo));
 bot.on('guildCreate', async () => {
   if (process.env.DISCORD_BOTS_ORG || process.env.DISCORD_BOTS_GG) {
     try {
@@ -88,13 +89,6 @@ bot.registry
     ['set-up', 'Bot set-up commands.'],
   ])
   .registerCommandsIn(path.resolve(__dirname, 'commands'));
-
-
-setInterval(() => {
-  const sweptUsersCount = bot.users.sweep(u => u.presence.status === 'offline');
-  logger.debug(`[Shard ${bot.shard.id}] Swept ${sweptUsersCount} users.`);
-}, 30 * 60 * 1000);
-
 
 bot.login(process.env.BOT_TOKEN);
 
