@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const asyncPool = require('tiny-async-pool');
+const pAll = require('p-all');
 const axios = require('axios');
 const database = require('../lib/db.js');
 const logger = require('../lib/logger.js');
@@ -8,26 +8,38 @@ const Webhook = database.define(
   'webhooks',
   {
     webhook_id: {
-      type: Sequelize.TEXT,
-      required: true,
+      type: Sequelize.STRING,
+      allowNull: false,
       unique: true,
     },
     webhook_token: {
-      type: Sequelize.TEXT,
-      required: true,
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     guild_id: {
-      type: Sequelize.TEXT,
-      required: true,
+      type: Sequelize.STRING,
+      allowNull: false,
       unique: true,
     },
     role_to_mention: {
-      type: Sequelize.TEXT,
-      required: false,
+      type: Sequelize.STRING,
+      allowNull: true,
     },
   },
   { timestamps: true },
 );
+
+const postWebhook = async (message, webhook) => {
+  let content = message;
+  if (webhook.role_to_mention) {
+    content = `${webhook.role_to_mention} ${message}`;
+  }
+  return axios.post(
+    `https://discordapp.com/api/webhooks/${webhook.webhook_id}/${webhook.webhook_token}`,
+    { content },
+    { validateStatus: () => true }, // doesn't reject promise when there is ANY response.
+  );
+};
 
 Webhook.postMessage = async (message) => {
   const webhooks = await Webhook.findAll({});
@@ -35,27 +47,15 @@ Webhook.postMessage = async (message) => {
     return;
   }
 
-
-  const postWebhook = async (webhook) => {
-    let content = message;
-    if (webhook.role_to_mention) {
-      content = `${webhook.role_to_mention} ${message}`;
-    }
-    return axios.post(
-      `https://discordapp.com/api/webhooks/${webhook.webhook_id}/${webhook.webhook_token}`,
-      { content },
-      { validateStatus: () => true }, // doesn't reject promise when there is ANY response.
-    );
-  };
-
-  const responses = await asyncPool(30, webhooks, postWebhook);
+  const actions = webhooks.map(webhook => () => postWebhook(message, webhook));
+  const responses = await pAll(actions, { concurrency: 30 });
 
   const webhooksToRemove = [];
   let rateLimitedWebhooks = 0;
   let failedWebhooks = 0;
   responses.forEach((response) => {
-    const { statusCode } = response.request.res;
-    if (statusCode === 404 || statusCode === 401) {
+    const statusCode = response.status;
+    if (statusCode === 404 || statusCode === 401 || statusCode === 400) {
       const webhookID = response.config.url.split('/')[5];
       webhooksToRemove.push(webhookID);
     }
@@ -68,6 +68,7 @@ Webhook.postMessage = async (message) => {
       failedWebhooks += 1;
     }
   });
+
   // deletes invalid / outdated webhooks from the database
   await Webhook.destroy({
     where: {

@@ -1,12 +1,25 @@
 /* eslint-env jest */
 process.env.DATABASE_URL = 'sqlite::memory:';
+process.env.CLIENT_ID = 'fakeclientid';
 
-
+const fs = require('fs');
+const nock = require('nock');
 const MockDate = require('mockdate');
 const db = require('./lib/db');
 const models = require('./models');
 
+if (process.env.JEST_NOCK_RECORD === 'true') {
+  const appendLogToFile = (content) => {
+    fs.appendFile('nock.txt', content);
+  };
+  nock.recorder.rec({
+    logging: appendLogToFile,
+  });
+}
+
 beforeEach(async () => {
+  nock.cleanAll();
+  nock.disableNetConnect();
   MockDate.set(1585952859 * 1000);
   await db.sync();
   for (const model of Object.values(models)) {
@@ -14,4 +27,4 @@ beforeEach(async () => {
     await model.destroy({ where: {}, truncate: true });
   }
 });
-afterAll(() => db.close());
+// afterAll(() => db.close());

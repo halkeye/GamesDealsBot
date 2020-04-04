@@ -22,7 +22,7 @@ module.exports = class BroadcastCommand extends Command {
 
   async run(msg, args) {
     try {
-      Webhook.postMessage(args.message);
+      await Webhook.postMessage(args.message);
       return msg.reply('ACCEPTED!');
     } catch (e) {
       logger.error(e);

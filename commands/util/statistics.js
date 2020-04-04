@@ -19,12 +19,17 @@ module.exports = class StatisticsCommand extends Command {
     });
   }
 
-  async run(msg) { // eslint-disable-line class-methods-use-this
+  async getGuildSize() {
+    const guilds = await this.client.shard.fetchClientValues('guilds.size');
+    return guilds.reduce((acc, cur) => acc + cur);
+  }
+
+  async run(msg) {
     try {
       const webhooksCount = await Webhook.count({ paranoid: true });
       const dealsCount = await Deal.count({ paranoid: false });
-      const guilds = await this.client.shard.fetchClientValues('guilds.size');
-      const guildsCount = guilds.reduce((acc, cur) => acc + cur);
+
+      const guildsCount = await this.getGuildSize();
       const stats = `:robot: **Uptime:** ${moment.duration(this.client.uptime).locale('en').humanize()}\n`
         + `:desktop: **Servers:** ${guildsCount}\n`
         + `:postbox: **Webhooks:** ${webhooksCount}\n`
