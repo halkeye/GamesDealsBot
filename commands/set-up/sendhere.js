@@ -30,7 +30,7 @@ module.exports = class SendHereCommand extends Command {
     });
   }
 
-  async run(msg, args) { // eslint-disable-line class-methods-use-this
+  async run(msg, args) {
     try {
       const webhook = await Webhook.findForGuild(msg.guild.id);
 

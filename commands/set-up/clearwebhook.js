@@ -20,17 +20,15 @@ module.exports = class ClearWebhookCommand extends Command {
     });
   }
 
-  async run(msg) { // eslint-disable-line class-methods-use-this
+  async run(msg) {
     try {
-      const count = await Webhook.destroy({
-        where: {
-          guild_id: msg.guild.id,
-        },
-        paranoid: true,
-      });
-      if (!count) {
+      const webhook = await Webhook.findForGuild(msg.guild.id);
+      if (!webhook) {
         return msg.reply(':x: | There are no webhooks related to this server.');
       }
+      // function does't exist
+      // await msg.channel.destroyWebhook(webhook.webhook_id);
+      await webhook.destroy();
       return msg.reply(':white_check_mark: | Webhook has been removed. Bot won\'t send any notifications to this channel anymore.');
     } catch (e) {
       logger.error(e);
