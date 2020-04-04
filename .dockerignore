@@ -113,3 +113,15 @@ temp/
 nock.txt
 log/
 .envrc
+.git
+.config
+.npm
+__tests__/
+__mocks__/
+Jenkinsfile
+jest.setup.js
+.eslintrc.js
+Dockerfile
+.gitignore
+.dockerignore
+docker-compose.yml
