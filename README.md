@@ -35,15 +35,16 @@ Command list can be accessed via `help` command.
 ### Required environment variables
 
 1. `BOT_TOKEN` generated on https://discordapp.com/developers/applications
-2. `DATABASE_URL`
+2. `DATABASE_URL` - 
 
 ### Optional environment variables
 
-1. `COMMAND_PREXIF` - Command prefix, defaults to `gd:`
-2. `LOG_LEVEL`
-3. `DISCORD_BOTS_ORG` - report to discordbots.org
-4. `DISCORD_BOTS_GG` - report to discord.bots.gg
-5. `ADMIN_USER_ID` -
+* `COMMAND_PREXIF` - Command prefix, defaults to `gd:`
+* `LOG_LEVEL` - Which log level to use, defaults to `info`
+* `LOG_FILE` - What log file to log to, defaults to only console log
+* `DISCORD_BOTS_ORG` - report to discordbots.org
+* `DISCORD_BOTS_GG` - report to discord.bots.gg
+* `ADMIN_USER_ID` - Bot admin discord id. Allowed to run sensitive commands like broadcast
 
 ## Licence 
 
