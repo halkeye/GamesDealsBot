@@ -5,6 +5,8 @@
   "scripts": {
     "lint": "eslint \"**/*.js\"",
     "start": "node index.js",
+    "start:bot": "node index.js",
+    "start:notifier": "node notifier.js",
     "dev": "nodemon index.js",
     "dev:server": "nodemon index.js | ./node_modules/pino-pretty/bin.js -t",
     "dev:notifier": "node notifier.js | ./node_modules/pino-pretty/bin.js -t"
