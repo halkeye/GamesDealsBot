@@ -112,3 +112,4 @@ temp/
 
 nock.txt
 log/
+.envrc
