@@ -24,9 +24,13 @@ if (process.env.JEST_NOCK_RECORD === 'true') {
   process.env.BOT_TOKEN = 'faketoken';
 }
 
+global.discordJsonNock = () => nock('https://discordapp.com:443', { encodedQueryParams: true }).defaultReplyHeaders({
+  'Content-Type': 'application/json',
+});
 beforeEach(async () => {
   nock.cleanAll();
   nock.disableNetConnect();
+
   MockDate.set(1585952859 * 1000);
   await db.sync();
   for (const model of Object.values(models)) {
@@ -37,8 +41,7 @@ beforeEach(async () => {
 // afterAll(() => db.close());
 
 global.buildSuccessWebhookReply = () => {
-  nock('https://discordapp.com:443', { encodedQueryParams: true })
-    .post('/api/v7/channels/695353503081693214/webhooks', { name: 'Games Deals', avatar: /data:image\/png;base64,.*/ })
+  global.discordJsonNock().post('/api/v7/channels/695353503081693214/webhooks', { name: 'Games Deals', avatar: /data:image\/png;base64,.*/ })
     .reply(200, {
       type: 1,
       id: '696062142960369765',
