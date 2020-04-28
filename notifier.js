@@ -7,13 +7,16 @@ const models = require('./models');
 const Deal = require('./models/Deal');
 const Webhook = require('./models/Webhook');
 
+const REDDIT_LOOKUP_MODE = process.env.REDDIT_LOOKUP_MODE || 'hot';
+const REDDIT_LIMIT = process.env.REDDIT_LIMIT || 10;
+
 async function main() {
   await db.authenticate();
   for (const model of Object.values(models)) {
     await model.sync();
   }
 
-  const response = await axios.get('https://www.reddit.com/r/GameDeals/hot/.json?limit=3');
+  const response = await axios.get(`https://www.reddit.com/r/GameDeals/${REDDIT_LOOKUP_MODE}/.json?limit=${REDDIT_LIMIT}`);
   if (response.status === 200) {
     const threads = response.data.data.children;
     const dealsToBroadcast = [];
@@ -55,4 +58,4 @@ async function main() {
   }
 }
 
-main().then(() => db.close()).catch(e => logger.error(e));
+main().then(() => db.close()).catch((e) => logger.error(e));
