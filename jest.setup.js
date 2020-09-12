@@ -6,7 +6,7 @@ const fs = require('fs');
 const nock = require('nock');
 const MockDate = require('mockdate');
 const { CommandoClient, CommandoMessage } = require('discord.js-commando');
-const { TextChannel, Constants: { ChannelTypes } } = require('discord.js');
+const { Snowflake, TextChannel, Constants: { ChannelTypes } } = require('discord.js');
 const db = require('./lib/db');
 const models = require('./models');
 
@@ -24,7 +24,7 @@ if (process.env.JEST_NOCK_RECORD === 'true') {
   process.env.BOT_TOKEN = 'faketoken';
 }
 
-global.discordJsonNock = () => nock('https://discordapp.com:443', { encodedQueryParams: true }).defaultReplyHeaders({
+global.discordJsonNock = () => nock('https://discord.com:443', { encodedQueryParams: true }).defaultReplyHeaders({
   'Content-Type': 'application/json',
 });
 beforeEach(async () => {
@@ -67,7 +67,9 @@ global.buildTextChannelCommand = (_Command) => {
   const command = new _Command(bot);
   const message = new CommandoMessage(
     bot,
-    {},
+    {
+      id: Snowflake.generate(),
+    },
     new TextChannel({
       client: bot,
       id: '110893872388825088',

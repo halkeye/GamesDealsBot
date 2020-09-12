@@ -4,6 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "lint": "eslint \"**/*.js\"",
     "start": "node index.js",
     "start:bot": "node index.js",
@@ -17,7 +18,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "discord.js": "^12.1.1",
-    "discord.js-commando": "git+https://github.com/discordjs/Commando.git",
+    "discord.js-commando": "https://github.com/discordjs/Commando/archive/bdbd84e2a978322f3af12c21e729eb7b7cd4a3dc.tar.gz",
     "dotenv": "^8.2.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.24.0",

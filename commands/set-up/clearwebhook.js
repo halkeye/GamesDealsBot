@@ -26,7 +26,10 @@ module.exports = class ClearWebhookCommand extends Command {
       if (!webhook) {
         return msg.reply(':x: | There are no webhooks related to this server.');
       }
-      const discordWebhook = await msg.client.fetchWebhook(webhook.webhook_id, webhook.webhook_token);
+      const discordWebhook = await msg.client.fetchWebhook(
+        webhook.webhook_id,
+        webhook.webhook_token,
+      );
       if (discordWebhook) {
         try {
           await discordWebhook.delete();

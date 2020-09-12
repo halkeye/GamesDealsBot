@@ -3,7 +3,6 @@ const { CommandoClient } = require('discord.js-commando');
 const Webhook = require('../../../models/Webhook.js');
 const Command = require('../../../commands/util/broadcast.js');
 
-
 describe('commands - util - broadcast', () => {
   it('broadcasts to all webhooks', async () => {
     await new Webhook({ webhook_id: '695831025607114843', webhook_token: 'RibgLvETIJjUIvcq8-Av9KnVpK9K8MZiPijgrNQ84qbp9qB88yKJTSeBrPRQcUGoZEdi', guild_id: '110893872388825088' }).save();

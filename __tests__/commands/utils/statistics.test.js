@@ -5,7 +5,12 @@ const Command = require('../../../commands/util/statistics.js');
 
 describe('commands - util - lastdeal', () => {
   it('generates basic statistics', async () => {
-    await new Deal({ title: 'foo', url: 'bar', thread_id: 'foobar' }).save();
+    await new Deal({
+      title: 'foo',
+      url: 'bar',
+      thread_id: 'foobar',
+      author: 'halkeye',
+    }).save();
 
     const command = new Command(new CommandoClient({}));
     command.getGuildSize = () => 0;

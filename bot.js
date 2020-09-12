@@ -20,7 +20,6 @@ const bot = new CommandoClient({
   messageSweepInterval: 30 * 60,
 });
 
-
 function setActivity() {
   bot.user.setActivity(`Use ${commandPrefix}help`);
 }
@@ -75,7 +74,6 @@ bot.on('guildCreate', async () => {
     }
   }
 });
-
 
 bot.registry
   .registerDefaultTypes()

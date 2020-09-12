@@ -10,6 +10,17 @@ const Webhook = require('./models/Webhook');
 const REDDIT_LOOKUP_MODE = process.env.REDDIT_LOOKUP_MODE || 'hot';
 const REDDIT_LIMIT = process.env.REDDIT_LIMIT || 10;
 
+const createMessageContent = (deals) => {
+  let message = '';
+  deals.forEach((deal) => {
+    message += `**${deal.title}**\n`;
+    message += `<${deal.url}>\n`;
+    message += `Posted by: *${deal.author}*\n`;
+    message += `https://reddit.com/${deal.id}\n`;
+  });
+  return message;
+};
+
 async function main() {
   await db.authenticate();
   for (const model of Object.values(models)) {
@@ -21,7 +32,12 @@ async function main() {
     const threads = response.data.data.children;
     const dealsToBroadcast = [];
     for (const thread of threads) { // eslint-disable-line no-restricted-syntax
-      const { data: { id, url, title } } = thread;
+      const {
+        data: {
+          id, url, title, author,
+        },
+      } = thread;
+
       if (!isFree(title)) {
         logger.debug(`[${id}] ${title} is not free`);
         continue;
@@ -36,6 +52,7 @@ async function main() {
           thread_id: id,
           title,
           url,
+          author,
         });
         await deal.save();
         dealsToBroadcast.push(deal);
@@ -44,10 +61,7 @@ async function main() {
 
     logger.debug(dealsToBroadcast);
     if (dealsToBroadcast.length > 0) {
-      let message = '';
-      dealsToBroadcast.forEach((deal) => {
-        message += `${deal.title} ${deal.url}\n`;
-      });
+      const message = createMessageContent(dealsToBroadcast);
       try {
         await Webhook.postMessage(message);
         logger.info('ACCEPTED');

@@ -19,6 +19,14 @@ const Deal = database.define(
       //   return value.trim();
       // },
     },
+    author: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      // set: (value) => {
+      //   console.log({ value, a: value.trim() });
+      //   return value.trim();
+      // },
+    },
     url: {
       type: Sequelize.TEXT,
       allowNull: false,

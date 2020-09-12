@@ -5,7 +5,12 @@ const LastDeal = require('../../../commands/util/lastdeal.js');
 
 describe('commands - util - lastdeal', () => {
   it('returns the last deal found', async () => {
-    await new Deal({ title: 'foo', url: 'bar', thread_id: 'foobar' }).save();
+    await new Deal({
+      title: 'foo',
+      url: 'bar',
+      thread_id: 'foobar',
+      author: 'halkeye',
+    }).save();
 
     const command = new LastDeal(new CommandoClient({}));
     const reply = jest.fn();

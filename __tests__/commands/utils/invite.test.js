@@ -7,6 +7,6 @@ describe('commands - util - invite', () => {
     const command = new Command(new CommandoClient({}));
     const reply = jest.fn();
     await command.run({ reply });
-    expect(reply.mock.calls[0]).toEqual(['https://discordapp.com/oauth2/authorize?client_id=fakeclientid&scope=bot&permissions=536890368']);
+    expect(reply.mock.calls[0]).toEqual(['https://discord.com/oauth2/authorize?client_id=fakeclientid&scope=bot&permissions=536890368']);
   });
 });

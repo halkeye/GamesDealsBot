@@ -47,7 +47,7 @@ const postWebhook = async (message, webhook) => {
     content = `${webhook.role_to_mention} ${message}`;
   }
   return axios.post(
-    `https://discordapp.com/api/webhooks/${webhook.webhook_id}/${webhook.webhook_token}`,
+    `https://discord.com/api/webhooks/${webhook.webhook_id}/${webhook.webhook_token}`,
     { content },
     { validateStatus: () => true }, // doesn't reject promise when there is ANY response.
   );

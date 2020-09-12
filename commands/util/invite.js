@@ -13,6 +13,6 @@ module.exports = class InviteCommand extends Command {
   }
 
   run(msg) { // eslint-disable-line class-methods-use-this
-    msg.reply(`https://discordapp.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=536890368`);
+    msg.reply(`https://discord.com/oauth2/authorize?client_id=${clientID}&scope=bot&permissions=536890368`);
   }
 };
