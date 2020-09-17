@@ -10,16 +10,7 @@ const Webhook = require('./models/Webhook');
 const REDDIT_LOOKUP_MODE = process.env.REDDIT_LOOKUP_MODE || 'hot';
 const REDDIT_LIMIT = process.env.REDDIT_LIMIT || 10;
 
-const createMessageContent = (deals) => {
-  let message = '';
-  deals.forEach((deal) => {
-    message += `**${deal.title}**\n`;
-    message += `<${deal.url}>\n`;
-    message += `Posted by: *${deal.author}*\n`;
-    message += `https://reddit.com/${deal.thread_id}\n`;
-  });
-  return message;
-};
+const createMessageContent = (deals) => deals.map((deal) => deal.createMessage());
 
 async function main() {
   await db.authenticate();
