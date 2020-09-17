@@ -16,7 +16,7 @@ const createMessageContent = (deals) => {
     message += `**${deal.title}**\n`;
     message += `<${deal.url}>\n`;
     message += `Posted by: *${deal.author}*\n`;
-    message += `https://reddit.com/${deal.id}\n`;
+    message += `https://reddit.com/${deal.thread_id}\n`;
   });
   return message;
 };
