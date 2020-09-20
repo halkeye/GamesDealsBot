@@ -11,12 +11,16 @@
     "start:notifier": "node notifier.js",
     "dev": "nodemon index.js",
     "dev:server": "nodemon index.js | bunyan",
-    "dev:notifier": "node notifier.js | bunyan"
+    "dev:notifier": "node notifier.js | bunyan",
+    "postinstall": "husky install",
+    "prepublish": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "author": "Gavin Mogan <github@gavinmogan.com>",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "axios": "^0.19.2",
+    "bunyan": "^1.8.14",
     "discord.js": "^12.1.1",
     "discord.js-commando": "https://github.com/discordjs/Commando/archive/bdbd84e2a978322f3af12c21e729eb7b7cd4a3dc.tar.gz",
     "dotenv": "^8.2.0",
@@ -29,11 +33,12 @@
     "validator": "^13.0.0"
   },
   "devDependencies": {
-    "bunyan": "^1.8.14",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
+    "husky": "^5.0.0-alpha.4",
     "jest": "^25.2.7",
+    "lint-staged": "^10.4.0",
     "mockdate": "^2.0.5",
     "nock": "^12.0.3",
     "sqlite3": "^4.1.1"
@@ -42,6 +47,12 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./jest.setup.js"
+    ]
+  },
+  "lint-staged": {
+    "**/*.{js,jsx}": [
+      "eslint . --fix",
+      "jest --bail —-findRelatedTests"
     ]
   }
 }
