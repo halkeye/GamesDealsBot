@@ -13,15 +13,19 @@ const REDDIT_LIMIT = process.env.REDDIT_LIMIT || 10;
 const createMessageContent = (deals) => deals.map((deal) => deal.createMessage());
 
 async function main() {
+  logger.debug('Authenticating');
   await db.authenticate();
   for (const model of Object.values(models)) {
     await model.sync();
   }
 
-  const response = await axios.get(`https://www.reddit.com/r/GameDeals/${REDDIT_LOOKUP_MODE}/.json?limit=${REDDIT_LIMIT}`);
+  const URL = `https://www.reddit.com/r/GameDeals/${REDDIT_LOOKUP_MODE}/.json?limit=${REDDIT_LIMIT}`;
+  const response = await axios.get(URL);
+  logger.debug(`Fetched ${URL} and got ${response.status}`);
   if (response.status === 200) {
     const threads = response.data.data.children;
     const dealsToBroadcast = [];
+    logger.debug(`Processing ${threads.count}`);
     for (const thread of threads) { // eslint-disable-line no-restricted-syntax
       const {
         data: {
@@ -50,12 +54,13 @@ async function main() {
       }
     }
 
+    logger.info(`Found ${dealsToBroadcast.length} to broadcast`);
     logger.debug(dealsToBroadcast);
     if (dealsToBroadcast.length > 0) {
       const message = createMessageContent(dealsToBroadcast);
       try {
         await Webhook.postMessage(message);
-        logger.info('ACCEPTED');
+        logger.info('Successfully submitted webhooks');
       } catch (e) {
         logger.warn(`Something went wrong during webhooks execution. Response status ${e.stack}`);
       }
@@ -63,4 +68,7 @@ async function main() {
   }
 }
 
-main().then(() => db.close()).catch((e) => logger.error(e));
+logger.debug('debug');
+main()
+  .then(() => db.close())
+  .catch((e) => logger.error('Error running main()', e));

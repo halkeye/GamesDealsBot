@@ -10,10 +10,10 @@
     "start:bot": "node index.js",
     "start:notifier": "node notifier.js",
     "dev": "nodemon index.js",
-    "dev:server": "nodemon index.js | ./node_modules/pino-pretty/bin.js -t",
-    "dev:notifier": "node notifier.js | ./node_modules/pino-pretty/bin.js -t"
+    "dev:server": "nodemon index.js | bunyan",
+    "dev:notifier": "node notifier.js | bunyan"
   },
-  "author": "Mikołaj Kalwa",
+  "author": "Gavin Mogan <github@gavinmogan.com>",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "axios": "^0.19.2",
@@ -24,13 +24,12 @@
     "moment": "^2.24.0",
     "p-all": "^3.0.0",
     "pg": "^8.0.0",
-    "pino-multi-stream": "^5.0.0",
-    "pino-pretty": "^4.0.0",
     "sequelize": "^5.21.5",
     "tiny-async-pool": "^1.1.0",
     "validator": "^13.0.0"
   },
   "devDependencies": {
+    "bunyan": "^1.8.14",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
