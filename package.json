@@ -52,7 +52,7 @@
   "lint-staged": {
     "**/*.{js,jsx}": [
       "eslint . --fix",
-      "jest --bail —-findRelatedTests"
+      "jest --bail —-findRelatedTests --passWithNoTests"
     ]
   }
 }
