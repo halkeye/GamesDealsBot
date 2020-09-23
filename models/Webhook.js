@@ -75,6 +75,7 @@ Webhook.postMessage = async (message) => {
   responses.forEach((response) => {
     const statusCode = response.status;
     if (statusCode === 404 || statusCode === 401 || statusCode === 400) {
+      // TODO: Send errors to sentry
       const webhookID = response.config.url.split('/')[5];
       webhooksToRemove.push(webhookID);
     }
