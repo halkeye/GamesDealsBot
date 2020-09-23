@@ -27,6 +27,7 @@ const Webhook = database.define(
     },
   },
   {
+    paranoid: true,
     timestamps: true,
     indexes: [
       {
