@@ -10,7 +10,7 @@ const Webhook = require('./models/Webhook');
 const REDDIT_LOOKUP_MODE = process.env.REDDIT_LOOKUP_MODE || 'hot';
 const REDDIT_LIMIT = process.env.REDDIT_LIMIT || 10;
 
-const createMessageContent = (deals) => deals.map((deal) => deal.createMessage());
+const createMessageContent = (deals) => deals.map((deal) => deal.createMessage()).join('\n');
 
 async function main() {
   logger.debug('Authenticating');
