@@ -19,7 +19,6 @@ const Webhook = database.define(
     guild_id: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true,
     },
     role_to_mention: {
       type: Sequelize.STRING,
