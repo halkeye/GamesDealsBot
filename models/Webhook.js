@@ -32,11 +32,11 @@ const Webhook = database.define(
     indexes: [
       {
         unique: true,
-        fields: ['webhook_id'],
+        fields: ['webhook_id', 'deletedAt'],
       },
       {
         unique: true,
-        fields: ['guild_id'],
+        fields: ['guild_id', 'deletedAt'],
       },
     ],
   },
@@ -57,6 +57,7 @@ const postWebhook = async (message, webhook) => {
 Webhook.findForGuild = async (id) => Webhook.findOne({
   where: {
     guild_id: id,
+    deletedAt: null,
   },
 });
 

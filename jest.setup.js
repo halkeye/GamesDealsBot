@@ -35,7 +35,7 @@ beforeEach(async () => {
   await db.sync();
   for (const model of Object.values(models)) {
     await model.sync();
-    await model.destroy({ where: {}, truncate: true });
+    await model.destroy({ where: {}, truncate: true, force: true });
   }
 });
 // afterAll(() => db.close());
