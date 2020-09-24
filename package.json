@@ -1,6 +1,6 @@
 {
   "name": "games-deals-bot",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "private": true,
   "main": "index.js",
   "scripts": {
